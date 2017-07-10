@@ -20,6 +20,15 @@
           }.bind(this));
         }
       });
+
+      AFRAME.registerComponent('random-pitch-click', {
+      init: function (time) {
+        this.el.addEventListener('click', function () {
+          this.setAttribute('n-sound', 'pitch', Math.random() * 3 + 1);
+          this.components['n-sound'].playSound();
+        });
+      }
+    });
     </script>
   </head>
 
@@ -37,6 +46,11 @@
           n-layout-browser="url:http://hah.altvr.com/play; isEnclosure:true;">
       </a-entity>
       <!--<a-entity position="-19.3 0.2 2.7" rotation="0 90 0" n-portal="targetSpace: experience-space-643566993579966920"></a-entity>-->
+      
+      <a-entity id="oneshot" geometry="primitive: box" material="color: blue" position="1 0 -2" n-sound="src: sounds/scratch.ogg; volume: 0.7; autoplay: true; oneshot: true; on: click" altspace-cursor-collider="enabled: true" sync="own-on: mousedown" sync-n-sound>
+        <a-entity n-text="fontSize: 2; text: oneshot" position="0 1 0"></a-entity>
+      </a-entity>
+      
 
       <a-assets>
         <a-asset-item id="bar-obj" src="./models/bar3.obj"></a-asset-item>
@@ -53,6 +67,8 @@
         <a-asset-item id="party_plaza_glasses-mtl" src="./models/party_plaza_glasses.mtl"></a-asset-item>
         <a-asset-item id="party_plaza_blue_glasses-obj" src="./models/party_plaza_blue_glasses.obj"></a-asset-item>
         <a-asset-item id="party_plaza_blue_glasses-mtl" src="./models/party_plaza_blue_glasses.mtl"></a-asset-item>
+        <a-asset-item id="dj-obj" src="./models/dj.obj"></a-asset-item>
+        <a-asset-item id="dj-mtl" src="./models/dj.mtl"></a-asset-item>
 
 
 
@@ -417,6 +433,38 @@
         <a-entity position="-1 -3.596 0.055" rotation="0 0 0" geometry="primitive: box" scale="2.95 0.005 0.01" radius="1" material="color: #FF0077;" altspace-cursor-collider="enabled: false" n-mesh-collider="type: environment; convex: false"></a-entity>
 
 
+
+
+
+
+
+        <!-- DJ Mixer + speaker -->
+        <a-entity position="-1.1 -3.60 0.6" rotation="-90 0 0" scale="0.004 0.004 0.004" obj-model="obj: #dj-obj; mtl: #dj-mtl" altspace-cursor-collider="enabled: false" n-mesh-collider="type: environment; convex: false"></a-entity>
+
+        <img style="width:100%;height:100%;float:left;background-repaet:no-repeat;background-size:cover;background-position:center center;" id="dj_screen" src="img/spinninrecords.jpg">
+        <img style="width:100%;height:100%;float:left;background-repaet:no-repeat;background-size:cover;background-position:center center;" id="dj_vinyl_green" src="img/spinninrecords.jpg">
+        <img style="width:100%;height:100%;float:left;background-repaet:no-repeat;background-size:cover;background-position:center center;" id="dj_vinyl_red" src="img/c2c.jpg">
+
+        <a-entity position="-1.04 -3.55 0.585" rotation="0 90 0" geometry="primitive: box" scale="0.005 0.084 0.153" radius="1" material="src: #dj_screen"></a-entity>
+
+        <!-- Grøn Plade -->
+        <a-entity id="vinyl_left" position="-1.0998 -3.485 0.558" rotation="0 0 0" geometry="primitive: cylinder" scale="0.018 0.001 0.018" radius="1" material="src: #dj_vinyl_green">
+          <a-animation attribute="rotation" to="0 360 0" dur="13000" repeat="indefinite" fill="forward" easing="linear"></a-animation>
+        </a-entity>
+
+        <!-- Grøn Plade Scratch -->
+        <a-entity id="vinyl_left_scratch" position="-1.0998 -3.484 0.558" rotation="0 0 0" geometry="primitive: cylinder" scale="0.018 0.001 0.018" radius="1" material="color: #0F0;">
+        </a-entity>
+
+
+        <!-- Rød Plade -->
+        <a-entity id="vinyl_right" position="-0.9775 -3.485 0.558" rotation="0 0 0" geometry="primitive: cylinder" scale="0.018 0.001 0.018" radius="1" material="src: #dj_vinyl_red">
+          <a-animation attribute="rotation" to="0 360 0" dur="13000" repeat="indefinite" fill="forward" easing="linear"></a-animation>
+        </a-entity>
+
+        <!-- Rød Plade Scratch -->
+        <a-entity id="vinyl_right_scratch" position="-0.9775 -3.484 0.558" rotation="0 0 0" geometry="primitive: cylinder" scale="0.018 0.001 0.018" radius="1" material="color: #0F0;">
+        </a-entity>
 
 
         <!-- Skybox -->
