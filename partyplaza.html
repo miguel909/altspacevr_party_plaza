@@ -1,0 +1,471 @@
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>Party Plaza</title>
+    <script src="https://aframe.io/releases/0.3.0/aframe.min.js"></script>
+    <script src="https://sdk.altvr.com/libs/altspace.js/2.4.2/altspace.min.js"></script>
+    <script>THREE.PositionalAudio = THREE.Audio</script>      
+    <style type="text/css">
+      .a-enter-vr{
+        display:none;
+      }
+    </style>
+    <script>
+      AFRAME.registerComponent('collapse-model', {
+        init: function () {
+          this.el.addEventListener('model-loaded', function () {
+            this.el.setObject3D('mesh', this.el.object3DMap.mesh.children[0]);
+            // setObject3D emits this event in a-frame 0.4.0
+            this.el.emit('object3dset', {type: 'mesh'});
+          }.bind(this));
+        }
+      });
+
+      AFRAME.registerComponent('random-pitch-click', {
+      init: function (time) {
+        this.el.addEventListener('click', function () {
+          this.setAttribute('n-sound', 'pitch', Math.random() * 3 + 1);
+          this.components['n-sound'].playSound();
+        });
+      }
+    });
+    </script>
+  </head>
+
+  <body>
+    <!-- Fire GIF that could be on the wall: http://i.imgur.com/rFLvL8k.gif -->
+    <a-scene altspace="fullspace: true" sync-system="author: altspacevr; app: partyplaza-scene-sync">
+      <!-- Enclosures -->
+      <a-entity position="0 5 -13" rotation="0 0 0" scale="12 12"
+          n-layout-browser="url:https://video-jukebox.firebaseapp.com/?room=Party-Plaza;">
+      </a-entity>
+      <a-entity position="-19 3 1" rotation="0 90 0" scale="6 6"
+          n-layout-browser="url:http://i.imgur.com/rFLvL8k.gif;">
+      </a-entity>
+      <a-entity position="0 2.2 13.3" rotation="0 90 0" scale="6 6 6"
+          n-layout-browser="url:http://hah.altvr.com/play; isEnclosure:true;">
+      </a-entity>
+      <!--<a-entity position="-19.3 0.2 2.7" rotation="0 90 0" n-portal="targetSpace: experience-space-643566993579966920"></a-entity>-->
+      
+
+      <a-assets>
+        <a-asset-item id="bar-obj" src="./models/bar3.obj"></a-asset-item>
+        <a-asset-item id="bar-mtl" src="./models/bar3.mtl"></a-asset-item>
+        <a-asset-item id="table-obj" src="./models/table.obj"></a-asset-item>
+        <a-asset-item id="table-mtl" src="./models/table.mtl"></a-asset-item>
+        <a-asset-item id="table_blue-obj" src="./models/table_blue.obj"></a-asset-item>
+        <a-asset-item id="table_blue-mtl" src="./models/table_blue.mtl"></a-asset-item>
+        <a-asset-item id="glowstick-blue-obj" src="./models/glowstick-blue.obj"></a-asset-item>
+        <a-asset-item id="glowstick-blue-mtl" src="./models/glowstick-blue.mtl"></a-asset-item>
+        <a-asset-item id="glowstick-pink-obj" src="./models/glowstick-pink.obj"></a-asset-item>
+        <a-asset-item id="glowstick-pink-mtl" src="./models/glowstick-pink.mtl"></a-asset-item>
+        <a-asset-item id="party_plaza_glasses-obj" src="./models/party_plaza_glasses.obj"></a-asset-item>
+        <a-asset-item id="party_plaza_glasses-mtl" src="./models/party_plaza_glasses.mtl"></a-asset-item>
+        <a-asset-item id="party_plaza_blue_glasses-obj" src="./models/party_plaza_blue_glasses.obj"></a-asset-item>
+        <a-asset-item id="party_plaza_blue_glasses-mtl" src="./models/party_plaza_blue_glasses.mtl"></a-asset-item>
+        <a-asset-item id="dj-obj" src="./models/dj.obj"></a-asset-item>
+        <a-asset-item id="dj-mtl" src="./models/dj.mtl"></a-asset-item>
+
+
+
+        <!-- Pickup Objects -->
+        <a-mixin id="glowstick-blue"
+          obj-model="obj: #glowstick-blue-obj; mtl: #glowstick-blue-mtl" collapse-model
+          scale="0.05 0.05 0.05"
+          rotation="0 0 0">    
+        </a-mixin>
+        <a-mixin id="glowstick-pink"
+          obj-model="obj: #glowstick-pink-obj; mtl: #glowstick-pink-mtl" collapse-model
+          scale="0.05 0.05 0.05"
+          rotation="0 0 0">    
+        </a-mixin>
+
+        <a-mixin id="party_plaza_glasses"
+          obj-model="obj: #party_plaza_glasses-obj; mtl: #party_plaza_glasses-mtl" collapse-model
+          scale="0.05 0.05 0.05"
+          rotation="0 0 0">    
+        </a-mixin>
+        <a-mixin id="party_plaza_blue_glasses"
+          obj-model="obj: #party_plaza_blue_glasses-obj; mtl: #party_plaza_blue_glasses-mtl" collapse-model
+          scale="0.05 0.05 0.05"
+          rotation="0 0 0">    
+        </a-mixin>
+        
+        <a-mixin id="parent-to-left-hand"
+          position="0 0 -0.1"
+          rotation="0 0 0"
+          scale="0.05 0.05 0.05"
+          n-skeleton-parent="part: hand; side: left;"
+          sync sync-n-skeleton-parent>
+        </a-mixin>
+        <a-mixin id="parent-to-right-hand"
+          position="0 0 -0.1"
+          rotation="0 0 0"
+          scale="0.05 0.05 0.05"
+          n-skeleton-parent="part: hand; side: right;"
+          sync sync-n-skeleton-parent>
+        </a-mixin>
+
+        <a-mixin id="parent-to-head"
+          position="0.04 0.03 -0.10"
+          rotation="0 0 0"
+          scale="0.0015 0.0015 0.0015"
+          n-skeleton-parent="part: head;"
+          sync sync-n-skeleton-parent>
+        </a-mixin>
+      </a-assets>
+      
+
+
+      <a-entity position="3.9 -0.14 -1.15">
+        <a-entity
+          id="glowstick-blue-instantiator"
+          mixin="glowstick-blue"
+          instantiator="group: glowstick_left; on: click; mixin: glowstick-blue parent-to-left-hand"
+          position="9.15 1.1 2.74"
+          rotation="0 90 90">
+        </a-entity>
+        <a-entity
+          id="glowstick-pink-instantiator"
+          mixin="glowstick-pink"
+          instantiator="group: glowstick_right; on: click; mixin: glowstick-pink parent-to-right-hand"
+          position="9.15 1.1 2.56"
+          rotation="0 90 90">
+        </a-entity>
+
+        <a-entity
+          id="glowstick-blue-instantiator"
+          mixin="glowstick-blue"
+          instantiator="group: glowstick_right; on: click; mixin: glowstick-blue parent-to-right-hand"
+          position="9.15 1.1 5.3"
+          rotation="0 90 90">
+        </a-entity>
+        <a-entity
+          id="glowstick-pink-instantiator"
+          mixin="glowstick-pink"
+          instantiator="group: glowstick_left; on: click; mixin: glowstick-pink parent-to-left-hand"
+          position="9.15 1.1 5.47"
+          rotation="0 90 90">
+        </a-entity>
+
+        <a-entity
+          id="party_plaza_glasses-instantiator"
+          mixin="party_plaza_glasses"
+          instantiator="group: glasses; on: click; mixin: party_plaza_glasses parent-to-head"
+          position="8.5 1.44 5.3"
+          rotation="0 45 0"
+          scale="0.0015 0.0015 0.0015">
+        </a-entity>
+        <a-entity
+          id="party_plaza_blue_glasses-instantiator"
+          mixin="party_plaza_blue_glasses"
+          instantiator="group: glasses; on: click; mixin: party_plaza_blue_glasses parent-to-head"
+          position="8.5 1.44 2.7"
+          rotation="0 135 0"
+          scale="0.0015 0.0015 0.0015">
+        </a-entity>
+      </a-entity>
+
+
+
+
+
+
+      <a-entity position="13 46.25 -14" rotation="0 0 0" scale="13 13 13">
+        <!-- Side Lights -->
+        <a-entity position="0.3 -3.65 1" rotation="0 0 0" geometry="primitive: box" scale="0.025 0.025 0.025" radius="1" material="color: #FE0077" altspace-collider="enabled: false">
+          <a-animation attribute="position" to="0.3 -2.25 1" dur="10000" opacity="0" repeat="indefinite" fill="forward" easing="linear"></animation>
+        </a-entity>
+
+        <a-entity position="0.4 -3.8 1.5" rotation="0 0 0" geometry="primitive: box" scale="0.025 0.025 0.025" radius="1" material="color: #FE0077" altspace-collider="enabled: false">
+          <a-animation attribute="position" to="0.4 -2.25 1.5" dur="13000" opacity="0" repeat="indefinite" fill="forward" easing="linear"></animation>
+        </a-entity>
+
+        <a-entity position="0.2 -3.7 2" rotation="0 0 0" geometry="primitive: box" scale="0.025 0.025 0.025" radius="1" material="color: #FE0077" altspace-collider="enabled: false">
+          <a-animation attribute="position" to="0.2 -2.25 2" dur="7000" opacity="0" repeat="indefinite" fill="forward" easing="linear"></animation>
+        </a-entity>
+
+        <a-entity position="0.25 -4.2 1.75" rotation="0 0 0" geometry="primitive: box" scale="0.025 0.025 0.025" radius="1" material="color: #FE0077" altspace-collider="enabled: false">
+          <a-animation attribute="position" to="0.25 -2.25 1.75" dur="12000" opacity="0" repeat="indefinite" fill="forward" easing="linear"></animation>
+        </a-entity>
+
+        <a-entity position="0.25 -4.3 1.35" rotation="0 0 0" geometry="primitive: box" scale="0.025 0.025 0.025" radius="1" material="color: #FE0077" altspace-collider="enabled: false">
+          <a-animation attribute="position" to="0.25 -2.25 1.35" dur="9000" opacity="0" repeat="indefinite" fill="forward" easing="linear"></animation>
+        </a-entity>
+
+        <a-entity position="0.3 -4.4 0.75" rotation="0 0 0" geometry="primitive: box" scale="0.025 0.025 0.025" radius="1" material="color: #FE0077" altspace-collider="enabled: false">
+          <a-animation attribute="position" to="0.25 -2.25 0.75" dur="11000" opacity="0" repeat="indefinite" fill="forward" easing="linear"></animation>
+        </a-entity>
+
+
+        <a-entity position="0.2 -3.65 0.53" rotation="0 0 0" geometry="primitive: box" scale="0.035 0.035 0.035" radius="1" material="color: #FE0077" altspace-collider="enabled: false">
+          <a-animation attribute="position" to="0.2 -2.25 0.53" dur="20000" repeat="indefinite" fill="forward" easing="linear"></animation>
+        </a-entity>
+
+        <a-entity position="0.25 -3.75 1.175" rotation="0 0 0" geometry="primitive: box" scale="0.035 0.035 0.035" radius="1" material="color: #FE0077" altspace-collider="enabled: false">
+          <a-animation attribute="position" to="0.25 -2.25 1.175" dur="17000" repeat="indefinite" fill="forward" easing="linear"></animation>
+        </a-entity>
+
+        <a-entity position="0.3 -3.75 1.6" rotation="0 0 0" geometry="primitive: box" scale="0.035 0.035 0.035" radius="1" material="color: #FE0077" altspace-collider="enabled: false">
+          <a-animation attribute="position" to="0.3 -2.25 1.6" dur="23000" repeat="indefinite" fill="forward" easing="linear"></animation>
+        </a-entity>
+
+
+
+
+        <a-entity position="0.3 -2.25 0.7" rotation="0 0 0" geometry="primitive: box" scale="0.025 0.025 0.025" radius="1" material="color: #00DBFA" altspace-collider="enabled: false">
+          <a-animation attribute="position" to="0.3 -3.65 0.7" dur="10000" repeat="indefinite" fill="forward" easing="linear"></animation>
+        </a-entity>
+
+        <a-entity position="0.4 -2.15 1.25" rotation="0 0 0" geometry="primitive: box" scale="0.025 0.025 0.025" radius="1" material="color: #00DBFA" altspace-collider="enabled: false">
+          <a-animation attribute="position" to="0.4 -3.65 1.25" dur="10000" repeat="indefinite" fill="forward" easing="linear"></animation>
+        </a-entity>
+
+        <a-entity position="0.2 -2.1 1.7" rotation="0 0 0" geometry="primitive: box" scale="0.025 0.025 0.025" radius="1" material="color: #00DBFA" altspace-collider="enabled: false">
+          <a-animation attribute="position" to="0.2 -3.65 1.7" dur="10000" repeat="indefinite" fill="forward" easing="linear"></animation>
+        </a-entity>
+
+        <a-entity position="0.25 -4.26 2.56" rotation="0 0 0" geometry="primitive: box" scale="0.025 0.025 0.025" radius="1" material="color: #00DBFA" altspace-collider="enabled: false">
+          <a-animation attribute="position" to="0.25 -3.65 2.56" dur="10000" repeat="indefinite" fill="forward" easing="linear"></animation>
+        </a-entity>
+
+        <a-entity position="0.25 -4.3 1.42" rotation="0 0 0" geometry="primitive: box" scale="0.025 0.025 0.025" radius="1" material="color: #00DBFA" altspace-collider="enabled: false">
+          <a-animation attribute="position" to="0.25 -3.65 1.42" dur="10000" repeat="indefinite" fill="forward" easing="linear"></animation>
+        </a-entity>
+
+        <a-entity position="0.3 -4.26 0.85" rotation="0 0 0" geometry="primitive: box" scale="0.025 0.025 0.025" radius="1" material="color: #00DBFA" altspace-collider="enabled: false">
+          <a-animation attribute="position" to="0.25 -3.65 0.85" dur="10000" repeat="indefinite" fill="forward" easing="linear"></animation>
+        </a-entity>
+
+
+
+
+        <a-entity position="0.2 -2.25 0.47" rotation="0 0 0" geometry="primitive: box" scale="0.035 0.035 0.035" radius="1" material="color: #00DBFA" altspace-collider="enabled: false">
+          <a-animation attribute="position" to="0.2 -3.65 0.47" dur="20000" repeat="indefinite" fill="forward" easing="linear"></animation>
+        </a-entity>
+
+        <a-entity position="0.25 -2.15 1.132" rotation="0 0 0" geometry="primitive: box" scale="0.035 0.035 0.035" radius="1" material="color: #00DBFA" altspace-collider="enabled: false">
+          <a-animation attribute="position" to="0.25 -3.65 1.132" dur="17000" repeat="indefinite" fill="forward" easing="linear"></animation>
+        </a-entity>
+
+        <a-entity position="0.3 -2.3 1.73" rotation="0 0 0" geometry="primitive: box" scale="0.035 0.035 0.035" radius="1" material="color: #00DBFA" altspace-collider="enabled: false">
+          <a-animation attribute="position" to="0.3 -3.65 1.73" dur="23000" repeat="indefinite" fill="forward" easing="linear"></animation>
+        </a-entity>
+
+
+
+
+        <a-entity position="-2.3 -3.65 1" rotation="0 0 0" geometry="primitive: box" scale="0.025 0.025 0.025" radius="1" material="color: #00DBFA" altspace-collider="enabled: false">
+          <a-animation attribute="position" to="-2.3 -2.25 1" dur="10000" repeat="indefinite" fill="forward" easing="linear"></animation>
+        </a-entity>
+
+        <a-entity position="-2.4 -3.8 1.5" rotation="0 0 0" geometry="primitive: box" scale="0.025 0.025 0.025" radius="1" material="color: #00DBFA" altspace-collider="enabled: false">
+          <a-animation attribute="position" to="-2.4 -2.25 1.5" dur="13000" repeat="indefinite" fill="forward" easing="linear"></animation>
+        </a-entity>
+
+        <a-entity position="-2.2 -3.7 2" rotation="0 0 0" geometry="primitive: box" scale="0.025 0.025 0.025" radius="1" material="color: #00DBFA" altspace-collider="enabled: false">
+          <a-animation attribute="position" to="-2.2 -2.25 2" dur="7000" repeat="indefinite" fill="forward" easing="linear"></animation>
+        </a-entity>
+
+        <a-entity position="-2.25 -4.2 1.75" rotation="0 0 0" geometry="primitive: box" scale="0.025 0.025 0.025" radius="1" material="color: #00DBFA" altspace-collider="enabled: false">
+          <a-animation attribute="position" to="-2.25 -2.25 1.75" dur="12000" repeat="indefinite" fill="forward" easing="linear"></animation>
+        </a-entity>
+
+        <a-entity position="-2.25 -4.3 1.35" rotation="0 0 0" geometry="primitive: box" scale="0.025 0.025 0.025" radius="1" material="color: #00DBFA" altspace-collider="enabled: false">
+          <a-animation attribute="position" to="-2.25 -2.25 1.35" dur="9000" repeat="indefinite" fill="forward" easing="linear"></animation>
+        </a-entity>
+
+        <a-entity position="-2.3 -4.4 0.75" rotation="0 0 0" geometry="primitive: box" scale="0.025 0.025 0.025" radius="1" material="color: #00DBFA" altspace-collider="enabled: false">
+          <a-animation attribute="position" to="-2.25 -2.25 0.75" dur="11000" repeat="indefinite" fill="forward" easing="linear"></animation>
+        </a-entity>
+
+
+        <a-entity position="-2.2 -3.65 0.53" rotation="0 0 0" geometry="primitive: box" scale="0.035 0.035 0.035" radius="1" material="color: #00DBFA" altspace-collider="enabled: false">
+          <a-animation attribute="position" to="-2.2 -2.25 0.53" dur="20000" repeat="indefinite" fill="forward" easing="linear"></animation>
+        </a-entity>
+
+        <a-entity position="-2.25 -3.75 1.175" rotation="0 0 0" geometry="primitive: box" scale="0.035 0.035 0.035" radius="1" material="color: #00DBFA" altspace-collider="enabled: false">
+          <a-animation attribute="position" to="-2.25 -2.25 1.175" dur="17000" repeat="indefinite" fill="forward" easing="linear"></animation>
+        </a-entity>
+
+        <a-entity position="-2.3 -3.75 1.6" rotation="0 0 0" geometry="primitive: box" scale="0.035 0.035 0.035" radius="1" material="color: #00DBFA" altspace-collider="enabled: false">
+          <a-animation attribute="position" to="-2.3 -2.25 1.6" dur="23000" repeat="indefinite" fill="forward" easing="linear"></animation>
+        </a-entity>
+
+
+
+
+        <a-entity position="-2.3 -2.25 0.7" rotation="0 0 0" geometry="primitive: box" scale="0.025 0.025 0.025" radius="1" material="color: #FE0077" altspace-collider="enabled: false">
+          <a-animation attribute="position" to="-2.3 -3.65 0.7" dur="10000" repeat="indefinite" fill="forward" easing="linear"></animation>
+        </a-entity>
+
+        <a-entity position="-2.4 -2.15 1.25" rotation="0 0 0" geometry="primitive: box" scale="0.025 0.025 0.025" radius="1" material="color: #FE0077" altspace-collider="enabled: false">
+          <a-animation attribute="position" to="-2.4 -3.65 1.25" dur="10000" repeat="indefinite" fill="forward" easing="linear"></animation>
+        </a-entity>
+
+        <a-entity position="-2.2 -2.1 1.7" rotation="0 0 0" geometry="primitive: box" scale="0.025 0.025 0.025" radius="1" material="color: #FE0077" altspace-collider="enabled: false">
+          <a-animation attribute="position" to="-2.2 -3.65 1.7" dur="10000" repeat="indefinite" fill="forward" easing="linear"></animation>
+        </a-entity>
+
+        <a-entity position="-2.25 -4.26 2.56" rotation="0 0 0" geometry="primitive: box" scale="0.025 0.025 0.025" radius="1" material="color: #FE0077" altspace-collider="enabled: false">
+          <a-animation attribute="position" to="-2.25 -3.65 2.56" dur="10000" repeat="indefinite" fill="forward" easing="linear"></animation>
+        </a-entity>
+
+        <a-entity position="-2.25 -4.3 1.42" rotation="0 0 0" geometry="primitive: box" scale="0.025 0.025 0.025" radius="1" material="color: #FE0077" altspace-collider="enabled: false">
+          <a-animation attribute="position" to="-2.25 -3.65 1.42" dur="10000" repeat="indefinite" fill="forward" easing="linear"></animation>
+        </a-entity>
+
+        <a-entity position="-2.3 -4.26 0.85" rotation="0 0 0" geometry="primitive: box" scale="0.025 0.025 0.025" radius="1" material="color: #FE0077" altspace-collider="enabled: false">
+          <a-animation attribute="position" to="-2.25 -3.65 0.85" dur="10000" repeat="indefinite" fill="forward" easing="linear"></animation>
+        </a-entity>
+
+
+
+        <a-entity position="-2.2 -2.25 0.47" rotation="0 0 0" geometry="primitive: box" scale="0.035 0.035 0.035" radius="1" material="color: #FE0077" altspace-collider="enabled: false">
+          <a-animation attribute="position" to="-2.2 -3.65 0.47" dur="20000" repeat="indefinite" fill="forward" easing="linear"></animation>
+        </a-entity>
+
+        <a-entity position="-2.25 -2.15 1.132" rotation="0 0 0" geometry="primitive: box" scale="0.035 0.035 0.035" radius="1" material="color: #FE0077">
+          <a-animation attribute="position" to="-2.25 -3.65 1.132" dur="17000" repeat="indefinite" fill="forward" easing="linear"></animation>
+        </a-entity>
+
+        <a-entity position="-2.3 -2.3 1.73" rotation="0 0 0" geometry="primitive: box" scale="0.035 0.035 0.035" radius="1" material="color: #FE0077" altspace-collider="enabled: false">
+          <a-animation attribute="position" to="-2.3 -3.65 1.73" dur="23000" repeat="indefinite" fill="forward" easing="linear"></animation>
+        </a-entity>
+
+
+
+
+
+        <!-- Bar -->
+        <a-entity position="0 -3.60 1.3" rotation="-90 90 0" scale="0.004 0.004 0.004" obj-model="obj: #bar-obj; mtl: #bar-mtl" altspace-cursor-collider="enabled: false" n-mesh-collider="type: environment; convex: false"></a-entity>
+
+
+        <!-- Tables -->
+        <a-entity position="-0.2 -3.59 0.58" rotation="-90 0 0" scale="0.004 0.004 0.004" obj-model="obj: #table-obj; mtl: #table-mtl" altspace-cursor-collider="enabled: false" n-mesh-collider="type: environment; convex: false"></a-entity>
+              <a-entity position="-0.20 -3.25 0.58" rotation="0 0 0" geometry="primitive: box" scale="0.1 0.2 0.005" material="color: #00DBFA;" altspace-cursor-collider="enabled: false">
+                <a-animation attribute="rotation" to="0 -360 0" dur="6000" repeat="indefinite" fill="forward" easing="linear"></a-animation>
+              </a-entity>
+              <a-entity position="-0.20 -3.13 0.58" rotation="0 0 0" geometry="primitive: box" scale="0.12 0.55 0.12" radius="1" material="color: #000000; transparent:true; opacity:0" altspace-cursor-collider="enabled: false" n-mesh-collider="type: environment; convex: false">
+                <a-animation attribute="rotation" to="-360 0 0" dur="2000" repeat="indefinite" fill="forward" easing="linear"></a-animation>
+              </a-entity>
+
+        <a-entity position="-1.8 -3.59 0.58" rotation="-90 0 0" scale="0.004 0.004 0.004" obj-model="obj: #table_blue-obj; mtl: #table_blue-mtl" altspace-cursor-collider="enabled: false" n-mesh-collider="type: environment; convex: false"></a-entity>
+              <a-entity position="-1.8 -3.25 0.58" rotation="0 0 0" geometry="primitive: box" scale="0.1 0.2 0.005" material="color: #FE0077;" altspace-cursor-collider="enabled: false">
+                <a-animation attribute="rotation" to="0 -360 0" dur="6000" repeat="indefinite" fill="forward" easing="linear"></a-animation>
+              </a-entity>
+              <a-entity position="-1.8 -3.13 0.58" rotation="0 0 0" geometry="primitive: box" scale="0.12 0.55 0.12" radius="1" material="color: #000000; transparent:true; opacity:0" altspace-cursor-collider="enabled: false" n-mesh-collider="type: environment; convex: false">
+                <a-animation attribute="rotation" to="-360 0 0" dur="2000" repeat="indefinite" fill="forward" easing="linear"></a-animation>
+              </a-entity>
+
+        <a-entity position="-1.8 -3.59 2.1" rotation="-90 0 0" scale="0.004 0.004 0.004" obj-model="obj: #table-obj; mtl: #table-mtl" altspace-cursor-collider="enabled: false" n-mesh-collider="type: environment; convex: false"></a-entity>
+              <a-entity position="-1.8 -3.25 2.1" rotation="0 0 0" geometry="primitive: box" scale="0.1 0.2 0.005" material="color: #00DBFA;" altspace-cursor-collider="enabled: false">
+                <a-animation attribute="rotation" to="0 -360 0" dur="6000" repeat="indefinite" fill="forward" easing="linear"></a-animation>
+              </a-entity>
+              <a-entity position="-1.8 -3.13 2.1" rotation="0 0 0" geometry="primitive: box" scale="0.12 0.55 0.12" radius="1" material="color: #000000; transparent:true; opacity:0" altspace-cursor-collider="enabled: false" n-mesh-collider="type: environment; convex: false">
+                <a-animation attribute="rotation" to="360 0 0" dur="2000" repeat="indefinite" fill="forward" easing="linear"></a-animation>
+              </a-entity>
+
+        <a-entity position="-0.2 -3.59 2.1" rotation="-90 0 0" scale="0.004 0.004 0.004" obj-model="obj: #table_blue-obj; mtl: #table_blue-mtl" altspace-cursor-collider="enabled: false" n-mesh-collider="type: environment; convex: false"></a-entity>
+              <a-entity position="-0.2 -3.25 2.1" rotation="0 0 0" geometry="primitive: box" scale="0.1 0.2 0.005" material="color: #FE0077;" altspace-cursor-collider="enabled: false">
+                <a-animation attribute="rotation" to="0 -360 0" dur="6000" repeat="indefinite" fill="forward" easing="linear"></a-animation>
+              </a-entity>
+              <a-entity position="-0.2 -3.13 2.1" rotation="0 0 0" geometry="primitive: box" scale="0.12 0.55 0.12" radius="1" material="color: #000000; transparent:true; opacity:0" altspace-cursor-collider="enabled: false" n-mesh-collider="type: environment; convex: false">
+                <a-animation attribute="rotation" to="360 0 0" dur="2000" repeat="indefinite" fill="forward" easing="linear"></a-animation>
+              </a-entity>
+
+
+        <!-- Walls Collision -->
+        <a-entity position="-1 -3.22 -0.45" rotation="0 0 0" geometry="primitive: box" scale="3 0.75 1" radius="1" material="color: #000000; transparent:true;" altspace-cursor-collider="enabled: false" n-mesh-collider="type: environment; convex: false">
+        </a-entity>
+
+        <a-entity position="-1 -3.22 2.99" rotation="0 0 0" geometry="primitive: box" scale="3 0.75 1" radius="1" material="color: #000000; transparent:true;" altspace-cursor-collider="enabled: false" n-mesh-collider="type: environment; convex: false">
+        </a-entity>
+
+        <a-entity position="-2.98 -3.22 1.28" rotation="0 90 0" geometry="primitive: box" scale="2.48 0.75 1" radius="1" material="color: #000000; transparent:true;" altspace-cursor-collider="enabled: false" n-mesh-collider="type: environment; convex: false">
+        </a-entity>
+
+        <a-entity position="0.99 -3.22 1.28" rotation="0 90 0" geometry="primitive: box" scale="2.48 0.75 1" radius="1" material="color: #000000; transparent:true;" altspace-cursor-collider="enabled: false" n-mesh-collider="type: environment; convex: false">
+        </a-entity>
+
+        <a-entity position="-1 -2.9 1.25" rotation="0 0 0" geometry="primitive: box" scale="3 0.05 2.6" radius="1" material="color: #000000;" altspace-cursor-collider="enabled: false" n-mesh-collider="type: environment; convex: false">
+        </a-entity>
+
+        <a-entity position="-1 -3.62 1.25" rotation="0 0 0" geometry="primitive: box" scale="3 0.05 2.6" radius="1" material="color: #000000;" altspace-cursor-collider="enabled: false" n-mesh-collider="type: environment; convex: false">
+        </a-entity>
+
+
+        <!-- Disko Firkant -->
+        <a-entity position="-1 -3 1.3" rotation="45 0 0" geometry="primitive: box" scale="0.12 0.12 0.12" radius="1" material="color: #FE0077">
+          <a-animation attribute="rotation" to="405 360 0" dur="23000" repeat="indefinite" fill="forward" easing="linear"></animation>
+        </a-entity>
+
+
+        <!-- Blue FloorLight -->
+        <a-entity position="-1.375 -3.596 1.25" rotation="0 0 0" geometry="primitive: box" scale="0.01 0.005 0.75" radius="1" material="color: #00DBFA;" altspace-cursor-collider="enabled: false" n-mesh-collider="type: environment; convex: false">
+          <a-animation attribute="rotation" to="0 360 0" dur="23000" repeat="indefinite" fill="forward" easing="linear"></animation>
+        </a-entity>
+
+        <a-entity position="-0.625 -3.596 1.25" rotation="0 0 0" geometry="primitive: box" scale="0.01 0.005 0.75" radius="1" material="color: #00DBFA;" altspace-cursor-collider="enabled: false" n-mesh-collider="type: environment; convex: false">
+          <a-animation attribute="rotation" to="0 360 0" dur="23000" repeat="indefinite" fill="forward" easing="linear"></animation>
+        </a-entity>
+
+        <a-entity position="-1 -3.596 1.64" rotation="0 0 0" geometry="primitive: box" scale="0.76 0.005 0.01" radius="1" material="color: #00DBFA;" altspace-cursor-collider="enabled: false" n-mesh-collider="type: environment; convex: false">
+          <a-animation attribute="rotation" to="0 360 0" dur="23000" repeat="indefinite" fill="forward" easing="linear"></animation>
+        </a-entity>
+
+        <a-entity position="-1 -3.596 0.87" rotation="0 0 0" geometry="primitive: box" scale="0.75 0.005 0.01" radius="1" material="color: #00DBFA;" altspace-cursor-collider="enabled: false" n-mesh-collider="type: environment; convex: false">
+          <a-animation attribute="rotation" to="0 360 0" dur="23000" repeat="indefinite" fill="forward" easing="linear"></animation>
+        </a-entity>
+
+
+        <!-- Purple FloorLight -->
+        <a-entity position="-2.47 -3.596 1.2725" rotation="0 0 0" geometry="primitive: box" scale="0.01 0.005 2.42" radius="1" material="color: #FF0077;" altspace-cursor-collider="enabled: false" n-mesh-collider="type: environment; convex: false"></a-entity>
+
+        <a-entity position="0.47 -3.596 1.2725" rotation="0 0 0" geometry="primitive: box" scale="0.01 0.005 2.42" radius="1" material="color: #FF0077;" altspace-cursor-collider="enabled: false" n-mesh-collider="type: environment; convex: false"></a-entity>
+
+        <a-entity position="-1 -3.596 2.485" rotation="0 0 0" geometry="primitive: box" scale="2.95 0.005 0.01" radius="1" material="color: #FF0077;" altspace-cursor-collider="enabled: false" n-mesh-collider="type: environment; convex: false"></a-entity>
+
+        <a-entity position="-1 -3.596 0.055" rotation="0 0 0" geometry="primitive: box" scale="2.95 0.005 0.01" radius="1" material="color: #FF0077;" altspace-cursor-collider="enabled: false" n-mesh-collider="type: environment; convex: false"></a-entity>
+
+
+
+
+
+
+
+        <!-- DJ Mixer + speaker -->
+        <a-entity position="-1.1 -3.60 0.6" rotation="-90 0 0" scale="0.004 0.004 0.004" obj-model="obj: #dj-obj; mtl: #dj-mtl" altspace-cursor-collider="enabled: false" n-mesh-collider="type: environment; convex: false"></a-entity>
+
+        <img style="width:100%;height:100%;float:left;background-repaet:no-repeat;background-size:cover;background-position:center center;" id="dj_screen" src="img/spinninrecords.jpg">
+        <img style="width:100%;height:100%;float:left;background-repaet:no-repeat;background-size:cover;background-position:center center;" id="dj_vinyl_green" src="img/spinninrecords.jpg">
+        <img style="width:100%;height:100%;float:left;background-repaet:no-repeat;background-size:cover;background-position:center center;" id="dj_vinyl_red" src="img/c2c.jpg">
+
+        <a-entity position="-1.04 -3.55 0.585" rotation="0 90 0" geometry="primitive: box" scale="0.005 0.084 0.153" radius="1" material="src: #dj_screen"></a-entity>
+
+        <!-- Grøn Plade -->
+        <a-entity id="vinyl_left" position="-1.0998 -3.485 0.558" rotation="0 0 0" geometry="primitive: cylinder" scale="0.018 0.001 0.018" radius="1" material="src: #dj_vinyl_green">
+          <a-animation attribute="rotation" to="0 360 0" dur="13000" repeat="indefinite" fill="forward" easing="linear"></a-animation>
+        </a-entity>
+
+        <!-- Grøn Plade Scratch -->
+        <a-entity id="vinyl_left_scratch" position="-1.0998 -3.484 0.558" rotation="0 0 0" geometry="primitive: cylinder" scale="0.018 0.001 0.018" radius="1" material="color: #000; transparent:true; opacity:0;" n-sound="src: sounds/scratch.ogg; volume: 1; autoplay: false; oneshot: true; on: click" altspace-cursor-collider="enabled: true" sync="own-on: mousedown" sync-n-sound>
+        </a-entity>
+
+
+        <!-- Rød Plade -->
+        <a-entity id="vinyl_right" position="-0.9775 -3.485 0.558" rotation="0 0 0" geometry="primitive: cylinder" scale="0.018 0.001 0.018" radius="1" material="src: #dj_vinyl_red">
+          <a-animation attribute="rotation" to="0 360 0" dur="13000" repeat="indefinite" fill="forward" easing="linear"></a-animation>
+        </a-entity>
+
+        <!-- Rød Plade Scratch -->
+        <a-entity id="vinyl_right_scratch" position="-0.9775 -3.484 0.558" rotation="0 0 0" geometry="primitive: cylinder" scale="0.018 0.001 0.018" radius="1" material="color: #000; transparent:true; opacity:0;" n-sound="src: sounds/scratch.ogg; volume: 1; autoplay: false; oneshot: true; on: click" altspace-cursor-collider="enabled: true" sync="own-on: mousedown" sync-n-sound>
+        </a-entity>
+
+
+        <!-- Skybox -->
+        <a-entity position="0 0 0" rotation="0 0 0" geometry="primitive: box" scale="-100 -100 -100" radius="1" material="color: #000000"></a-entity>
+      </a-entity>
+    </a-scene>
+  </body>
+</html>
